@@ -33,7 +33,7 @@ nof1function(
 )
 }
 \arguments{
-\item{data}{A dataframe containing all of the individual N of 1 data}
+\item{data}{A dataframe containing all of the N of 1 data}
 
 \item{ID}{The name of the ID variable in the dataset}
 

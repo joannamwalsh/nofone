@@ -6,7 +6,7 @@
 #' plot, a forest plot, and density plots, dic information, and parameter
 #' summary statistics for each individual.
 #'
-#' @param data A dataframe containing all of the individual N of 1 data
+#' @param data A dataframe containing all of the N of 1 data
 #' @param ID The name of the ID variable in the dataset
 #' @param groupvars The names of grouping variables that the user would like to
 #' be included in the summary table (not including the stratifying variables)
