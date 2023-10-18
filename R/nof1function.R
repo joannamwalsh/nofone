@@ -194,7 +194,7 @@ nof1function <- function(data,
   }
 
   ## CREATE PLOTS
-  plots <- plot.arrange(res.ind = res.ind,
+  plots <- plotarrange(res.ind = res.ind,
                         groupvars = groupvars,
                         stratvars = stratvars,
                         clinicaldiff = clinicaldiff)

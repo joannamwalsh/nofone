@@ -1,7 +1,7 @@
-#' @title gen.DfRect
+#' @title genDfRect
 #'
 #' @description Generates rectangle probability data frames from a summary
-#' dataset that can then be passed to the \code{plot.probBar} function
+#' dataset that can then be passed to the \code{plotprobBar} function
 #'
 #' @param res A data frame containing ID and grouping variables for each
 #' participant in addition to probabilities of each treatment being
@@ -22,12 +22,12 @@
 #' @param ninfo The number of grouping and stratifying variables
 #' (including the ID variable) included in the \code{res} dataframe
 #' @return Returns a data frame with variables representing the breaks and
-#' regions of probability bars that can be plotted with the the
-#' \code{plot.combined.probBar} function.
+#' regions of probability bars that can be plotted with the
+#' \code{plotprobBar} function.
 #' @import tidyverse
 #' @export
 
-gen.DfRect <- function(res, ninfo) {
+genDfRect <- function(res, ninfo) {
   rect.prob <- res %>%
     select(1:all_of(ninfo), secondbetter, neitherbetter, firstbetter, comp)
   rect.prob <- rect.prob %>%
@@ -53,12 +53,12 @@ gen.DfRect <- function(res, ninfo) {
   return(rect.prob)
 }
 
-#' @title plot.probBar
+#' @title plotprobBar
 #'
 #' @description Creates a stacked probability bar plot
 #'
 #' @param data A data frame containing the variables to be plotted, created by
-#' the \code{gen.DfRect} function
+#' the \code{genDfRect} function
 #' @param clinicaldiff The lowest possible practical clinical difference between
 #' treatment coefficients
 #' @param title The desired title for the plot
@@ -67,7 +67,7 @@ gen.DfRect <- function(res, ninfo) {
 #' @param x.colname The name of the variable to be plotted on the x axis
 #' (this is the "ID" variable)
 #' @param y.colname The name of the variable to be plotted on the y axis
-#' (this is the "prob" variable from the \code{gen.DfRect} function)
+#' (this is the "prob" variable from the \code{genDfRect} function)
 #' @param bar.width The desired width of the probability bars
 #' @param bar.col The desired color of the probability bars
 #' @param bar.alpha The alpha values for the three different bars in the
@@ -87,7 +87,7 @@ gen.DfRect <- function(res, ninfo) {
 #' @export
 #'
 
-plot.probBar <- function(data, clinicaldiff, title, title.size = 10, facets,
+plotprobBar <- function(data, clinicaldiff, title, title.size = 10, facets,
                          x.colname = "ID", y.colname = "prob",
                          bar.width = 0.7, bar.col = "black",
                          bar.alpha = c(1, 0.5, 0.2), ref.col = "grey60",
@@ -152,7 +152,7 @@ plot.probBar <- function(data, clinicaldiff, title, title.size = 10, facets,
 #' @title errdata
 #'
 #' @description Generates a data frame containing winsorized confidence interval
-#' information that can then be passed to the \code{plot.errBar} function
+#' information that can then be passed to the \code{ploterrBar} function
 #'
 #' @param res A data frame containing ID and grouping variables for each
 #' participant in addition to probabilities of each treatment being
@@ -196,7 +196,7 @@ errdata <- function(res) {
   return(list(res, cutoff))
 }
 
-#' @title plot.errBar
+#' @title ploterrBar
 #'
 #' @description Creates a forest error bar plot.
 #'
@@ -230,7 +230,7 @@ errdata <- function(res) {
 #' @export
 
 
-plot.errBar <- function(data,
+ploterrBar <- function(data,
                         title,
                         title.size = 10,
                         facets,
@@ -326,7 +326,7 @@ plot.errBar <- function(data,
 
 }
 
-#' @title plot.arrange
+#' @title plotarrange
 #'
 #' @description Generates stratified, faceted probability bar plots and forest
 #' plots and arranges them nicely
@@ -357,16 +357,16 @@ plot.errBar <- function(data,
 #' @param clinicaldiff The lowest possible practical clinical difference between
 #' treatment coefficients
 #' @return Returns a stratified probability bar plot from the
-#' \code{plot.probBar} function and a forest plot from the \code{plot.errBar}
+#' \code{plotprobBar} function and a forest plot from the \code{ploterrBar}
 #' function that can be viewed using \code{grid.draw()}.
 #' @import tidyverse
 #' @import gridExtra
 #' @import cowplot
 #' @export
 
-plot.arrange <- function(res.ind, groupvars, stratvars, clinicaldiff) {
+plotarrange <- function(res.ind, groupvars, stratvars, clinicaldiff) {
 
-  rect.prob <- gen.DfRect(res = res.ind,
+  rect.prob <- genDfRect(res = res.ind,
                           ninfo = length(groupvars) + length(stratvars) + 1)
   ci.indSep <- errdata(res = res.ind)[[1]]
 
@@ -392,7 +392,7 @@ plot.arrange <- function(res.ind, groupvars, stratvars, clinicaldiff) {
 
       strata <- stratvars[1]
       p.indSep[[i]] <-
-        plot.probBar(data = rect.prob[rect.prob[,strata] ==
+        plotprobBar(data = rect.prob[rect.prob[,strata] ==
                                         levels(rect.prob[, stratvars[1]])[i],],
                      clinicaldiff = clinicaldiff,
                      title         = strata.title[i],
@@ -401,7 +401,7 @@ plot.arrange <- function(res.ind, groupvars, stratvars, clinicaldiff) {
                      label.y       = label.y)
 
       p.ci.indSep[[i]] <-
-        plot.errBar(data = ci.indSep[ci.indSep[,strata] ==
+        ploterrBar(data = ci.indSep[ci.indSep[,strata] ==
                                        levels(ci.indSep[, stratvars[1]])[i],],
                     title        = strata.title[i],
                     facets       = facets,
@@ -411,7 +411,7 @@ plot.arrange <- function(res.ind, groupvars, stratvars, clinicaldiff) {
                     cutoff       = errdata(res.ind)[[2]])
     }
   } else {
-    p.indSep[[1]] <- plot.probBar(data = rect.prob,
+    p.indSep[[1]] <- plotprobBar(data = rect.prob,
                                   clinicaldiff = clinicaldiff,
                                   title         = "",
                                   facets        = facets,
@@ -419,7 +419,7 @@ plot.arrange <- function(res.ind, groupvars, stratvars, clinicaldiff) {
                                   label.y       = T)
 
 
-    p.ci.indSep[[1]] <- plot.errBar(data         = ci.indSep,
+    p.ci.indSep[[1]] <- ploterrBar(data         = ci.indSep,
                                     title        = "",
                                     facets       = facets,
                                     clinicaldiff   = clinicaldiff,

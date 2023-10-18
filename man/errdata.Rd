@@ -31,5 +31,5 @@ the magnitude of the y limits of the plot
 }
 \description{
 Generates a data frame containing winsorized confidence interval
-information that can then be passed to the \code{plot.errBar} function
+information that can then be passed to the \code{ploterrBar} function
 }
