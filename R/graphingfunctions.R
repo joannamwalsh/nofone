@@ -24,7 +24,8 @@
 #' @return Returns a data frame with variables representing the breaks and
 #' regions of probability bars that can be plotted with the
 #' \code{plotprobBar} function.
-#' @import tidyverse
+#' @import dplyr
+#' @import tidyr
 #' @export
 
 genDfRect <- function(res, ninfo) {
@@ -83,7 +84,8 @@ genDfRect <- function(res, ninfo) {
 #' and the probabilities from the
 #' \code{y.colname} variable plotted as stacked bar plots for each
 #' \code{x.colname} value
-#' @import tidyverse
+#' @import ggplot2
+#' @import dplyr
 #' @export
 #'
 
@@ -226,7 +228,8 @@ errdata <- function(res) {
 #' @return Returns a forest error bar plot with the first facet variable as a
 #' y-axis facet, the second facet variable as an x-axis facet (if specified),
 #' and the 95% confidence interval for each \code{x.colname} value.
-#' @import tidyverse
+#' @import ggplot2
+#' @import dplyr
 #' @export
 
 
@@ -359,7 +362,7 @@ ploterrBar <- function(data,
 #' @return Returns a stratified probability bar plot from the
 #' \code{plotprobBar} function and a forest plot from the \code{ploterrBar}
 #' function that can be viewed using \code{grid.draw()}.
-#' @import tidyverse
+#' @import ggplot2
 #' @import gridExtra
 #' @import cowplot
 #' @export

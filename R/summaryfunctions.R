@@ -9,7 +9,7 @@
 #' @param samples MCMC samples of each parameter
 #' @return A list containing a list of kernel density plots for each parameter
 #' and a summary table of the parameter distributions
-#' @import tidyverse
+#' @import ggplot2
 #' @import stats
 #' @export
 
@@ -89,7 +89,7 @@ indiv.summary <- function(samples) {
 #' minus the other is greater than 0}
 #' \item{comp.treat.post.y}{The posterior quantiles of one outcome minus the
 #' other when comparing two treatments}
-#' @import tidyverse
+#' @import dplyr
 #' @import utils
 #' @import stats
 #' @export
