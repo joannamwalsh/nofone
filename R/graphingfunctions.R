@@ -28,28 +28,37 @@
 
 genDfRect <- function(res, ninfo) {
   rect.prob <- res %>%
-    select(1:all_of(ninfo), .data$secondbetter, .data$neitherbetter,
-           .data$firstbetter, .data$comp)
+    dplyr::select(1:dplyr::all_of(ninfo),
+                  .data$secondbetter,
+                  .data$neitherbetter,
+                  .data$firstbetter,
+                  .data$comp)
   rect.prob <- rect.prob %>%
-    mutate(brk1 = .data$secondbetter) %>%
-    mutate(brk2 = .data$neitherbetter + .data$secondbetter)
+    dplyr::mutate(brk1 = .data$secondbetter) %>%
+    dplyr::mutate(brk2 = .data$neitherbetter + .data$secondbetter)
   rect.prob <- rect.prob %>%
-    gather(region, prob, secondbetter:firstbetter)
+    tidyr::gather(.data$region, .data$prob,
+                  .data$secondbetter:.data$firstbetter)
   rect.prob <- rect.prob %>%
-    mutate(ymin = ifelse(region == "secondbetter", 0, NA)) %>%
-    mutate(ymin = ifelse(region == "neitherbetter", .data$brk1, .data$ymin)) %>%
-    mutate(ymin = ifelse(region == "firstbetter", .data$brk2, .data$ymin))
+    dplyr::mutate(ymin = ifelse(.data$region == "secondbetter", 0, NA)) %>%
+    dplyr::mutate(ymin = ifelse(.data$region == "neitherbetter",
+                         .data$brk1, .data$ymin)) %>%
+    dplyr::mutate(ymin = ifelse(.data$region == "firstbetter",
+                                .data$brk2, .data$ymin))
   rect.prob <- rect.prob %>%
-    mutate(ymax = ifelse(region == "secondbetter", .data$brk1, NA)) %>%
-    mutate(ymax = ifelse(region == "neitherbetter", .data$brk2, .data$ymax)) %>%
-    mutate(ymax = ifelse(region == "firstbetter", 1, .data$ymax))
+    dplyr::mutate(ymax = ifelse(.data$region == "secondbetter",
+                                .data$brk1, NA)) %>%
+    dplyr::mutate(ymax = ifelse(.data$region == "neitherbetter", .data$brk2,
+                         .data$ymax)) %>%
+    dplyr::mutate(ymax = ifelse(.data$region == "firstbetter", 1, .data$ymax))
   rect.prob <- rect.prob %>%
-    mutate(region = factor(region, c("firstbetter", "neitherbetter",
-                                     "secondbetter")))
+    dplyr::mutate(region = factor(.data$region, c("firstbetter",
+                                                  "neitherbetter",
+                                                  "secondbetter")))
   rect.prob <- rect.prob %>%
-    mutate(which_comp = paste0(comp, ".", region))
+    dplyr::mutate(which_comp = paste0(.data$comp, ".", .data$region))
   rect.prob <- rect.prob %>%
-    mutate(which_comp = factor(.data$which_comp))
+    dplyr::mutate(which_comp = factor(.data$which_comp))
   return(rect.prob)
 }
 
@@ -84,7 +93,7 @@ genDfRect <- function(res, ninfo) {
 #' \code{y.colname} variable plotted as stacked bar plots for each
 #' \code{x.colname} value
 #' @import ggplot2
-#' @import dplyr
+#' @import rlang
 #' @export
 #'
 
@@ -103,8 +112,8 @@ plotprobBar <- function(data, clinicaldiff, title, title.size = 10, facets,
                            "(by at least", clinicaldiff, "points)"))
 
   data[, x.colname] <- as.factor(data[, x.colname])
-  xcolname = sym(x.colname)
-  ycolname = sym(y.colname)
+  xcolname = rlang::sym(x.colname)
+  ycolname = rlang::sym(y.colname)
   p <- ggplot(data, aes(x = !!xcolname, y = !!ycolname)) +
     geom_bar(stat = "identity", position = "stack", aes(alpha = .data$region),
              color = bar.col, fill = bar.col, width = bar.width) +
@@ -185,11 +194,11 @@ errdata <- function(res) {
                                           probs = 0.975,
                                           na.rm = TRUE)))))
 
-  res$comp2.5_cut <- Winsorize(res$comp2.5, minval = -1*cutoff,
+  res$comp2.5_cut <- DescTools::Winsorize(res$comp2.5, minval = -1*cutoff,
                                maxval = cutoff, probs = c(0.05, 0.95))
-  res$comp50_cut <- Winsorize(res$comp50, minval = -1*cutoff,
+  res$comp50_cut <- DescTools::Winsorize(res$comp50, minval = -1*cutoff,
                               maxval = cutoff, probs = c(0.05, 0.95))
-  res$comp97.5_cut <- Winsorize(res$comp97.5, minval = -1*cutoff,
+  res$comp97.5_cut <- DescTools::Winsorize(res$comp97.5, minval = -1*cutoff,
                                 maxval = cutoff, probs = c(0.05, 0.95))
 
   return(list(res, cutoff))
@@ -226,7 +235,7 @@ errdata <- function(res) {
 #' y-axis facet, the second facet variable as an x-axis facet (if specified),
 #' and the 95% confidence interval for each \code{x.colname} value.
 #' @import ggplot2
-#' @import dplyr
+#' @import rlang
 #' @export
 
 
@@ -266,7 +275,7 @@ ploterrBar <- function(data,
   yintercept    = c(-1*clinicaldiff,
                     clinicaldiff)
   data[, x.colname] <- as.factor(data[, x.colname])
-  xcolname = sym(x.colname)
+  xcolname = rlang::sym(x.colname)
   p <- ggplot(data, aes(x = !!xcolname, y = .data$comp50_cut))
 
   yintercept.used <- yintercept
@@ -426,19 +435,22 @@ plotarrange <- function(res.ind, groupvars, stratvars, clinicaldiff) {
                                     cutoff        = errdata(res.ind)[[2]])
   }
 
-  legend.shared <- get_legend(p.indSep[[1]])
+  legend.shared <- cowplot::get_legend(p.indSep[[1]])
   for (i in 1:length(p.indSep)) {
     p.indSep[[i]] <- p.indSep[[i]] + theme(legend.position = "none")
   }
 
   p.indSep[[(length(p.indSep) + 1)]] <- legend.shared
 
-  g.indSep <- arrangeGrob(grobs = p.indSep, ncol = (length(p.indSep) - 1),
-                          nrow = 2,
-                          layout_matrix = rbind(1:(length(p.indSep) -1),
-                                                rep(length(p.indSep), 3)),
+  g.indSep <- gridExtra::arrangeGrob(grobs = p.indSep,
+                                     ncol = (length(p.indSep) - 1),
+                                     nrow = 2,
+                                     layout_matrix =
+                                       rbind(1:(length(p.indSep) -1),
+                                             rep(length(p.indSep), 3)),
                           heights = c(9.5, 0.5))
 
-  g.ci.indSep <- arrangeGrob(grobs = p.ci.indSep, ncol = length(p.ci.indSep))
+  g.ci.indSep <- gridExtra::arrangeGrob(grobs = p.ci.indSep,
+                                        ncol = length(p.ci.indSep))
   return(list(g.indSep, g.ci.indSep))
 }

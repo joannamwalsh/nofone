@@ -4,7 +4,7 @@
 \alias{nof1.inits.normal}
 \title{nof1.inits.normal}
 \usage{
-nof1.inits.normal(data, Treat.name, bs.trend, bs_df, n.chains)
+nof1.inits.normal(data, Treat.name, beta.prior, bs.trend, bs_df, n.chains)
 }
 \arguments{
 \item{data}{A list containing Y (the outcome), vectors of 0s and 1s in
@@ -12,6 +12,13 @@ the model matrix for each \emph{Treat.name}, indicating whether or not the
 response was recorded under the treatment, and base spline information}
 
 \item{Treat.name}{Vector of unique treatment names}
+
+\item{beta.prior}{Prior for the treatment-specific intercept. It should be a
+list, where the first element is the distribution and the next two are the
+parameters associated with the distribution. For example,
+list("dnorm", 0, 1e-6) gives a normal prior with mean 0 and standard
+deviation 1e-6. If truncation is desired, the last two parameters should be
+the upper and lower limits for the truncation.}
 
 \item{bs.trend}{Indicator for whether the model should adjust for trend
 using splines. The default is \code{F}.}

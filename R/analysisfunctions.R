@@ -139,11 +139,11 @@ nof1.data <- function(Y,
       knots <- cent.y.time[cumsum(rle(block.no)$lengths)]
       # remove knot at the end of last block
       knots <- knots[-length(knots)]
-      bs.design.matrix <- bs(cent.y.time, knots = knots)
+      bs.design.matrix <- splines::bs(cent.y.time, knots = knots)
     }
     # otherwise set desired degrees of freedom
     else {
-      bs.design.matrix <- bs(cent.y.time, df = bs.df)
+      bs.design.matrix <- splines::bs(cent.y.time, df = bs.df)
     }
 
     nof1$bs_df <- ncol(bs.design.matrix)
@@ -573,8 +573,8 @@ jags.fit <- function(nof1){
          try increasing your max.run")
   }
   # create the mcmc object
-  start <- mcpar(samples[[1]])[1]
-  end <- mcpar(samples[[1]])[2]
+  start <- coda::mcpar(samples[[1]])[1]
+  end <- coda::mcpar(samples[[1]])[2]
   mid <- (end + start-1)/2
   burnin <- ceiling(end - mid)
   samples <- window(samples, start = mid+1, end = end, frequency = 1)
@@ -582,7 +582,7 @@ jags.fit <- function(nof1){
   samples <- new.mcmc(samples)
 
   # check if the samples reach the number of n.run
-  eff.conv <- effectiveSize(samples)[pars.save]
+  eff.conv <- coda::effectiveSize(samples)[pars.save]
   print('Min ESS after conv:')
   print(which(eff.conv==min(eff.conv)))
   print(min(eff.conv))
@@ -597,7 +597,7 @@ jags.fit <- function(nof1){
                                          n.iter = extra.run)
     samples <- add.mcmc(samples, added_samples)
 
-    eff.conv <- effectiveSize(samples)[pars.save]
+    eff.conv <- coda::effectiveSize(samples)[pars.save]
     print('Current Min ESS:')
     print(which(eff.conv==min(eff.conv)))
     print(min(eff.conv))
@@ -605,7 +605,7 @@ jags.fit <- function(nof1){
   n.thin <- ceiling(nrow(samples[[1]])*n.chains/n.run/2)
   #Divide by 2 to make sure there are enough samples
   samples.thinned <- window(samples, 1, dim(samples[[1]])[1], n.thin)
-  eff.conv <- effectiveSize(samples.thinned)[pars.save]
+  eff.conv <- coda::effectiveSize(samples.thinned)[pars.save]
   print('Min ESS While Thinning:')
   print(which(eff.conv==min(eff.conv)))
   print(min(eff.conv))
@@ -619,7 +619,7 @@ jags.fit <- function(nof1){
 
     n.thin <- ceiling(nrow(samples[[1]])*n.chains/n.run/2)
     samples.thinned <- window(samples, 1, dim(samples[[1]])[1], n.thin)
-    eff.conv <- effectiveSize(samples.thinned)[pars.save]
+    eff.conv <- coda::effectiveSize(samples.thinned)[pars.save]
     print('Min ESS While Thinning:')
     print(which(eff.conv==min(eff.conv)))
     print(min(eff.conv))
@@ -633,7 +633,7 @@ jags.fit <- function(nof1){
              samples = samples,
              max.gelman = max.gelman,
              dic = dic,
-             eff = min(effectiveSize(samples)[pars.save]))
+             eff = min(coda::effectiveSize(samples)[pars.save]))
   return(out)
 }
 
@@ -662,9 +662,9 @@ add.mcmc <- function(x, y){
                               dimnames = list(NULL,
                                               dimnames(x[[1]])[[2]]))
     newobjects[[i]] <- rbind(x[[i]], y[[i]])
-    newobjects[[i]] <- mcmc(newobjects[[i]])
+    newobjects[[i]] <- coda::mcmc(newobjects[[i]])
   }
-  mcmc.list(newobjects)
+  coda::mcmc.list(newobjects)
 }
 
 #' @title find.max.gelman
@@ -680,7 +680,7 @@ add.mcmc <- function(x, y){
 
 find.max.gelman <- function(samples){
   samples <- lapply(samples, function(x) { x[,colSums(abs(x)) != 0] })
-  gr.uni.stats <- gelman.diag(samples, multivariate = FALSE)$psrf[,1]
+  gr.uni.stats <- coda::gelman.diag(samples, multivariate = FALSE)$psrf[,1]
   largest.gr <- max(gr.uni.stats[!is.nan(gr.uni.stats)])
   out = list(largest.gr)
   names(out) <- names(which(gr.uni.stats == largest.gr))
@@ -706,8 +706,8 @@ new.mcmc <- function(x){
     newobjects[[i]] <- matrix(NA, nrow = 0, ncol = n.var,
                               dimnames = list(NULL, dimnames(x[[1]])[[2]]))
     newobjects[[i]] <- x[[i]]
-    newobjects[[i]] <- mcmc(newobjects[[i]])
+    newobjects[[i]] <- coda::mcmc(newobjects[[i]])
   }
-  mcmc.list(newobjects)
+  coda::mcmc.list(newobjects)
 }
 
