@@ -115,7 +115,7 @@ will be modeled}
 using splines}
 \item{priors}{Priors that the code will be using. Default priors are used if
 priors were not specified}
-\item{bs_df} {The b-spline basis matrix from the bs function in the splines
+\item{bs_df}{The b-spline basis matrix from the bs function in the splines
 package}
 \item{code}{Rjags model file code that is generated using information
 provided by the user with \code{nof1.normal.rjags}. To view model file

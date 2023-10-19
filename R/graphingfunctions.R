@@ -9,16 +9,18 @@
 #' columns of this dataframe should be as follows:
 #' first the ID variable, then any desired grouping variables, and then, in any
 #' order,
-#'          \item[] \code{comp}: the two treatments being compared in the row
+#' \itemize{
+#'      \item[] \code{comp}: the two treatments being compared in the row
 #'          (in the form trt1-trt2)
-#'          \item[] \code{firstbetter}: the probability that the first treatment
+#'      \item[] \code{firstbetter}: the probability that the first treatment
 #'          is better than the second treatment
-#'          \item[] \code{secondbetter}: the probability that the second
+#'      \item[] \code{secondbetter}: the probability that the second
 #'          treatment is better than the first treatment
-#'          \item[] \code{neitherbetter}: 1- \code{firstbetter}-
+#'      \item[] \code{neitherbetter}: 1- \code{firstbetter}-
 #'          \code{secondbetter}
+#'}
 #' @param ninfo The number of grouping and stratifying variables
-#' (including the ID variable) included in the \code{res} dataframe
+#' (including the ID variable) included in the \code{res} data frame
 #' @return Returns a data frame with variables representing the breaks and
 #' regions of probability bars that can be plotted with the
 #' \code{plotprobBar} function.
@@ -167,17 +169,19 @@ plotprobBar <- function(data, clinicaldiff, title, title.size = 10, facets,
 #' @param res A data frame containing ID and grouping variables for each
 #' participant in addition to probabilities of each treatment being
 #' better, worse, or the same as each other treatment under consideration. The
-#' columns of this dataframe should be as follows:
-#' first the ID variable, then any desired grouping variables, and then, in any
+#' columns of this dataframe should be as follows: first the ID variable,
+#' then any desired grouping variables, and then, in any
 #' order,
-#'          \item[] \code{comp}: the two treatments being compared in the row
+#' \itemize{
+#'    \item[] \code{comp}: the two treatments being compared in the row
 #'          (in the form trt1-trt2)
-#'          \item[] \code{firstbetter}: the probability that the first treatment
+#'.   \item[] \code{firstbetter}: the probability that the first treatment
 #'          is better than the second treatment
 #'          \item[] \code{secondbetter}: the probability that the second
 #'          treatment is better than the first treatment
 #'          \item[] \code{neitherbetter}: 1- \code{firstbetter}-
 #'          \code{secondbetter}
+#' }
 #' @return Returns a data frame with variables representing the winsorized
 #' medians and confidence intervals as well as a cutoff value representing
 #' the magnitude of the y limits of the plot
@@ -346,14 +350,16 @@ ploterrBar <- function(data,
 #' consideration. The columns of this dataframe should be as follows:
 #' first the ID variable, then any desired grouping variables, and then, in any
 #' order,
-#'          \item[] \code{comp}: the two treatments being compared in the row
+#' \itemize{
+#'     \item[] \code{comp}: the two treatments being compared in the row
 #'          (in the form trt1-trt2)
-#'          \item[] \code{firstbetter}: the probability that the first treatment
+#'     \item[] \code{firstbetter}: the probability that the first treatment
 #'          is better than the second treatment
-#'          \item[] \code{secondbetter}: the probability that the second
+#'     \item[] \code{secondbetter}: the probability that the second
 #'          treatment is better than the first treatment
-#'          \item[] \code{neitherbetter}: 1- \code{firstbetter}-
+#'     \item[] \code{neitherbetter}: 1- \code{firstbetter}-
 #'          \code{secondbetter}
+#'}
 #' @param groupvars The names of grouping variables that the user would like to
 #' be included in the summary table (not including the stratifying variables)
 #' @param stratvars The names of variables that the user would like the plots to
