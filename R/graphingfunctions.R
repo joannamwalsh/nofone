@@ -38,8 +38,7 @@ genDfRect <- function(res, ninfo) {
   rect.prob <- rect.prob %>%
     dplyr::mutate(brk1 = .data$secondbetter) %>%
     dplyr::mutate(brk2 = .data$neitherbetter + .data$secondbetter)
-  rect.prob <- rect.prob %>%
-    tidyr::gather(rect.prob, key = "region", value = "prob",
+  rect.prob <- tidyr::gather(rect.prob, key = "region", value = "prob",
                   .data$secondbetter:.data$firstbetter)
   rect.prob <- rect.prob %>%
     dplyr::mutate(ymin = ifelse(.data$region == "secondbetter", 0, NA)) %>%
