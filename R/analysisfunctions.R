@@ -412,7 +412,7 @@ nof1.normal.rjags <- function(nobs,
 #' @param n.chains Number of chains to run
 #' @return A list of the initial values for each treatment-specific intercept
 #' and spline term to be used in the \code{jags.fit} function
-#' @import stats
+#' @importFrom stats coef lm rnorm
 #' @export
 
 nof1.inits.normal <- function(data,
@@ -508,7 +508,7 @@ nof1.inits.normal <- function(data,
 #' \item{eff}{Minimum effective sample size out of all saved parameters}
 #' @import coda
 #' @import rjags
-#' @import stats
+#' @importFrom stats window
 #' @export
 
 jags.fit <- function(nof1){

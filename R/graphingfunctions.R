@@ -25,7 +25,7 @@
 #' regions of probability bars that can be plotted with the
 #' \code{plotprobBar} function.
 #' @import dplyr
-#' @import tidyr
+#' @importFrom tidyr gather
 #' @export
 
 genDfRect <- function(res, ninfo) {
@@ -94,7 +94,7 @@ genDfRect <- function(res, ninfo) {
 #' \code{y.colname} variable plotted as stacked bar plots for each
 #' \code{x.colname} value
 #' @import ggplot2
-#' @import rlang
+#' @importFrom rlang sym
 #' @export
 #'
 
@@ -184,8 +184,8 @@ plotprobBar <- function(data, clinicaldiff, title, title.size = 10, facets,
 #' @return Returns a data frame with variables representing the winsorized
 #' medians and confidence intervals as well as a cutoff value representing
 #' the magnitude of the y limits of the plot
-#' @import DescTools
-#' @import stats
+#' @importFrom DescTools Winsorize
+#' @importFrom stats quantile
 #' @export
 
 errdata <- function(res) {
@@ -238,7 +238,7 @@ errdata <- function(res) {
 #' y-axis facet, the second facet variable as an x-axis facet (if specified),
 #' and the 95% confidence interval for each \code{x.colname} value.
 #' @import ggplot2
-#' @import rlang
+#' @importFrom rlang sym
 #' @export
 
 
@@ -372,8 +372,8 @@ ploterrBar <- function(data,
 #' \code{plotprobBar} function and a forest plot from the \code{ploterrBar}
 #' function that can be viewed using \code{grid.draw()}.
 #' @import ggplot2
-#' @import gridExtra
-#' @import cowplot
+#' @importFrom gridExtra arrangeGrob
+#' @importFrom cowplot get_legend
 #' @export
 
 plotarrange <- function(res.ind, groupvars, stratvars, clinicaldiff) {

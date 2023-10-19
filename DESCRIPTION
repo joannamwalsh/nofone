@@ -9,12 +9,11 @@ Authors@R: c(person(given = "Chris",
            person(given = "Joanna",
            family = "Walsh",
            role = c("aut", "cre"),
-           email = "joanna_walsh@brown.edu"),
-           )
+           email = "joanna_walsh@brown.edu"))
 Maintainer: Joanna Walsh <joanna_walsh@brown.edu>
 Description: Contains several functions for conducting individual N of 1 
     analyses for individuals and combining these individual results into 
-    summary tables and plots
+    summary tables and plots.
 License: What license is it under?
 Encoding: UTF-8
 LazyData: true

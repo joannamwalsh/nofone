@@ -10,7 +10,7 @@
 #' @return A list containing a list of kernel density plots for each parameter
 #' and a summary table of the parameter distributions
 #' @import ggplot2
-#' @import stats
+#' @importFrom stats median quantile
 #' @export
 
 indiv.summary <- function(samples) {
@@ -90,8 +90,8 @@ indiv.summary <- function(samples) {
 #' \item{comp.treat.post.y}{The posterior quantiles of one outcome minus the
 #' other when comparing two treatments}
 #' @import dplyr
-#' @import utils
-#' @import stats
+#' @importFrom utils combn
+#' @importFrom stats median quantile sd setNames
 #' @export
 
 results.table <- function(indiv,
