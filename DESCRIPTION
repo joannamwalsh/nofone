@@ -1,6 +1,6 @@
 Package: nofone
 Type: Package
-Title: Functions to analyze N of 1 Data
+Title: Functions for N of 1 Data
 Version: 0.1.0
 Authors@R: c(person(given = "Chris",
            family = "Schmid",
@@ -13,8 +13,8 @@ Authors@R: c(person(given = "Chris",
            )
 Maintainer: Joanna Walsh <joanna_walsh@brown.edu>
 Description: Contains several functions for conducting individual N of 1 
-analyses for individuals and combining these individual results into summary 
-tables and plots
+    analyses for individuals and combining these individual results into 
+    summary tables and plots
 License: What license is it under?
 Encoding: UTF-8
 LazyData: true
