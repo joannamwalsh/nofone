@@ -227,6 +227,7 @@ nof1.data <- function(Y,
   if (is.null(inits)) {
     inits <- nof1.inits.normal(nof1$data,
                                nof1$Treat.name,
+                               nof1$beta.prior,
                                nof1$bs.trend,
                                nof1$bs_df,
                                nof1$n.chains)
@@ -398,6 +399,12 @@ nof1.normal.rjags <- function(nobs,
 #' the model matrix for each \emph{Treat.name}, indicating whether or not the
 #' response was recorded under the treatment, and base spline information
 #' @param Treat.name Vector of unique treatment names
+#' @param beta.prior Prior for the treatment-specific intercept. It should be a
+#' list, where the first element is the distribution and the next two are the
+#' parameters associated with the distribution. For example,
+#' list("dnorm", 0, 1e-6) gives a normal prior with mean 0 and standard
+#' deviation 1e-6. If truncation is desired, the last two parameters should be
+#' the upper and lower limits for the truncation.
 #' @param bs.trend Indicator for whether the model should adjust for trend
 #' using splines. The default is \code{F}.
 #' @param bs_df The b-spline basis matrix from the bs function in the splines
@@ -410,6 +417,7 @@ nof1.normal.rjags <- function(nobs,
 
 nof1.inits.normal <- function(data,
                               Treat.name,
+                              beta.prior,
                               bs.trend,
                               bs_df,
                               n.chains){

@@ -343,7 +343,7 @@ results.table <- function(indiv,
                           "firstbetter")
 
   res.ind <- res.ind %>%
-    mutate(ID = as.character(ID))
+    mutate(ID = as.character(.data$ID))
 
   if (!is.null(groupvars)) {
     for (i in 1:length(groupvars)) {
@@ -358,20 +358,20 @@ results.table <- function(indiv,
   }
 
   res.ind <- res.ind %>%
-    mutate(comp2.5 = as.numeric(comp2.5),
-           comp50 = as.numeric(comp50),
-           comp97.5 = as.numeric(comp97.5),
-           compprob  = as.numeric(compprob),
-           secondbetter = as.numeric(secondbetter),
-           firstbetter = as.numeric(firstbetter))
+    mutate(comp2.5 = as.numeric(.data$comp2.5),
+           comp50 = as.numeric(.data$comp50),
+           comp97.5 = as.numeric(.data$comp97.5),
+           compprob  = as.numeric(.data$compprob),
+           secondbetter = as.numeric(.data$secondbetter),
+           firstbetter = as.numeric(.data$firstbetter))
 
   res.ind <- res.ind %>%
-    mutate(comp2.5 = ifelse(show == 0, NA, comp2.5),
-           comp50 = ifelse(show == 0, NA, comp50),
-           comp97.5 = ifelse(show == 0, NA, comp97.5),
-           compprob  = ifelse(show == 0, NA, compprob),
-           secondbetter = ifelse(show == 0, NA, secondbetter),
-           firstbetter = ifelse(show == 0, NA, firstbetter))
+    mutate(comp2.5 = ifelse(.data$show == 0, NA, comp2.5),
+           comp50 = ifelse(.data$show == 0, NA, comp50),
+           comp97.5 = ifelse(.data$show == 0, NA, comp97.5),
+           compprob  = ifelse(.data$show == 0, NA, compprob),
+           secondbetter = ifelse(.data$show == 0, NA, secondbetter),
+           firstbetter = ifelse(.data$show == 0, NA, firstbetter))
 
   res.ind <- res.ind %>%
     mutate(neitherbetter = 1 - secondbetter - firstbetter)
@@ -380,7 +380,7 @@ results.table <- function(indiv,
     mutate(comp = rep(gsub("_minus_", "-", names), each = nrow(summ.ind)))
 
   res.ind <- res.ind %>%
-    mutate(comp = factor(comp))
+    mutate(comp = factor(.data$comp))
 
   noshow.ids <-
     names(tapply(res.ind$secondbetter,
@@ -392,7 +392,7 @@ results.table <- function(indiv,
                                             sum(is.na(x))) == ncomp]
   res.ind <- res.ind %>%
     dplyr::filter(!(ID %in% noshow.ids)) %>%
-    select(-show)
+    select(-.data$show)
 
   rownames(res.ind) <- NULL
 

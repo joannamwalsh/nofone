@@ -9,7 +9,6 @@
 #' columns of this dataframe should be as follows:
 #' first the ID variable, then any desired grouping variables, and then, in any
 #' order,
-#'      \begin{itemize}
 #'          \item[] \code{comp}: the two treatments being compared in the row
 #'          (in the form trt1-trt2)
 #'          \item[] \code{firstbetter}: the probability that the first treatment
@@ -18,7 +17,6 @@
 #'          treatment is better than the first treatment
 #'          \item[] \code{neitherbetter}: 1- \code{firstbetter}-
 #'          \code{secondbetter}
-#'      \end{itemize}
 #' @param ninfo The number of grouping and stratifying variables
 #' (including the ID variable) included in the \code{res} dataframe
 #' @return Returns a data frame with variables representing the breaks and
@@ -30,27 +28,28 @@
 
 genDfRect <- function(res, ninfo) {
   rect.prob <- res %>%
-    select(1:all_of(ninfo), secondbetter, neitherbetter, firstbetter, comp)
+    select(1:all_of(ninfo), .data$secondbetter, .data$neitherbetter,
+           .data$firstbetter, .data$comp)
   rect.prob <- rect.prob %>%
-    mutate(brk1 = secondbetter) %>%
-    mutate(brk2 = neitherbetter + secondbetter)
+    mutate(brk1 = .data$secondbetter) %>%
+    mutate(brk2 = .data$neitherbetter + .data$secondbetter)
   rect.prob <- rect.prob %>%
     gather(region, prob, secondbetter:firstbetter)
   rect.prob <- rect.prob %>%
     mutate(ymin = ifelse(region == "secondbetter", 0, NA)) %>%
-    mutate(ymin = ifelse(region == "neitherbetter", brk1, ymin)) %>%
-    mutate(ymin = ifelse(region == "firstbetter", brk2, ymin))
+    mutate(ymin = ifelse(region == "neitherbetter", .data$brk1, .data$ymin)) %>%
+    mutate(ymin = ifelse(region == "firstbetter", .data$brk2, .data$ymin))
   rect.prob <- rect.prob %>%
-    mutate(ymax = ifelse(region == "secondbetter", brk1, NA)) %>%
-    mutate(ymax = ifelse(region == "neitherbetter", brk2, ymax)) %>%
-    mutate(ymax = ifelse(region == "firstbetter", 1, ymax))
+    mutate(ymax = ifelse(region == "secondbetter", .data$brk1, NA)) %>%
+    mutate(ymax = ifelse(region == "neitherbetter", .data$brk2, .data$ymax)) %>%
+    mutate(ymax = ifelse(region == "firstbetter", 1, .data$ymax))
   rect.prob <- rect.prob %>%
     mutate(region = factor(region, c("firstbetter", "neitherbetter",
                                      "secondbetter")))
   rect.prob <- rect.prob %>%
     mutate(which_comp = paste0(comp, ".", region))
   rect.prob <- rect.prob %>%
-    mutate(which_comp = factor(which_comp))
+    mutate(which_comp = factor(.data$which_comp))
   return(rect.prob)
 }
 
@@ -107,7 +106,7 @@ plotprobBar <- function(data, clinicaldiff, title, title.size = 10, facets,
   xcolname = sym(x.colname)
   ycolname = sym(y.colname)
   p <- ggplot(data, aes(x = !!xcolname, y = !!ycolname)) +
-    geom_bar(stat = "identity", position = "stack", aes(alpha = region),
+    geom_bar(stat = "identity", position = "stack", aes(alpha = .data$region),
              color = bar.col, fill = bar.col, width = bar.width) +
     geom_hline(yintercept = 0.5, color = ref.col, linetype = "dashed") +
     facet_grid(facets, scales = "free", space = "free") +
@@ -162,7 +161,6 @@ plotprobBar <- function(data, clinicaldiff, title, title.size = 10, facets,
 #' columns of this dataframe should be as follows:
 #' first the ID variable, then any desired grouping variables, and then, in any
 #' order,
-#'      \begin{itemize}
 #'          \item[] \code{comp}: the two treatments being compared in the row
 #'          (in the form trt1-trt2)
 #'          \item[] \code{firstbetter}: the probability that the first treatment
@@ -171,7 +169,6 @@ plotprobBar <- function(data, clinicaldiff, title, title.size = 10, facets,
 #'          treatment is better than the first treatment
 #'          \item[] \code{neitherbetter}: 1- \code{firstbetter}-
 #'          \code{secondbetter}
-#'      \end{itemize}
 #' @return Returns a data frame with variables representing the winsorized
 #' medians and confidence intervals as well as a cutoff value representing
 #' the magnitude of the y limits of the plot
@@ -270,7 +267,7 @@ ploterrBar <- function(data,
                     clinicaldiff)
   data[, x.colname] <- as.factor(data[, x.colname])
   xcolname = sym(x.colname)
-  p <- ggplot(data, aes(x = !!xcolname, y = comp50_cut))
+  p <- ggplot(data, aes(x = !!xcolname, y = .data$comp50_cut))
 
   yintercept.used <- yintercept
   p <- p +
@@ -292,7 +289,7 @@ ploterrBar <- function(data,
 
   p <- p +
     geom_point() +
-    geom_errorbar(aes(ymin = comp2.5_cut, ymax = comp97.5_cut),
+    geom_errorbar(aes(ymin = .data$comp2.5_cut, ymax = .data$comp97.5_cut),
                   width = errBar.width) +
     ylab(y.label) +
     xlab(x.label) +
@@ -340,7 +337,6 @@ ploterrBar <- function(data,
 #' consideration. The columns of this dataframe should be as follows:
 #' first the ID variable, then any desired grouping variables, and then, in any
 #' order,
-#'      \begin{itemize}
 #'          \item[] \code{comp}: the two treatments being compared in the row
 #'          (in the form trt1-trt2)
 #'          \item[] \code{firstbetter}: the probability that the first treatment
@@ -349,7 +345,6 @@ ploterrBar <- function(data,
 #'          treatment is better than the first treatment
 #'          \item[] \code{neitherbetter}: 1- \code{firstbetter}-
 #'          \code{secondbetter}
-#'      \end{itemize}
 #' @param groupvars The names of grouping variables that the user would like to
 #' be included in the summary table (not including the stratifying variables)
 #' @param stratvars The names of variables that the user would like the plots to
