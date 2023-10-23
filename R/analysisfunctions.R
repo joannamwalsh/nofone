@@ -1,5 +1,5 @@
 #' @title nof1.data
-#'
+#'Test
 #' @description Creates an N of 1 object containing the specified data, priors,
 #' sample specifications, and jags model code to be passed to \code{jags.fit}
 #' for individual analysis
