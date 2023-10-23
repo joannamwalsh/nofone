@@ -14,13 +14,13 @@ consideration. The columns of this dataframe should be as follows:
 first the ID variable, then any desired grouping variables, and then, in any
 order,
 \itemize{
-    \item[] \code{comp}: the two treatments being compared in the row
+    \item \code{comp}: the two treatments being compared in the row
          (in the form trt1-trt2)
-    \item[] \code{firstbetter}: the probability that the first treatment
+    \item \code{firstbetter}: the probability that the first treatment
          is better than the second treatment
-    \item[] \code{secondbetter}: the probability that the second
+    \item \code{secondbetter}: the probability that the second
          treatment is better than the first treatment
-    \item[] \code{neitherbetter}: 1- \code{firstbetter}-
+    \item \code{neitherbetter}: 1- \code{firstbetter}-
          \code{secondbetter}
 }}
 
