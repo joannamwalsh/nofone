@@ -14,7 +14,7 @@ Maintainer: Joanna Walsh <joanna_walsh@brown.edu>
 Description: Contains several functions for conducting individual N of 1 
     analyses for individuals and combining these individual results into 
     summary tables and plots.
-License: What license is it under?
+License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
 RoxygenNote: 7.2.3

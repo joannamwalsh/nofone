@@ -19,6 +19,7 @@
 #' continuous outcome
 #' @param Y The name of the outcome variable in the dataset. This variable
 #' should be a vector with NA's included in time order.
+#'
 #' @param treatment The name of the treatment variable in the dataset. This
 #' variable should have the same length as the outcome variable and can be
 #' character or numeric.
